@@ -10,18 +10,18 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+app.use(cookieParser());
+
 const allowedOrigins = [process.env.FRONTEND_URL || "http://localhost:3000"];
 
 app.use(
   cors({
     origin: allowedOrigins,
-    credentials: true,
+    credentials: process.env.NODE_ENV === "production",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
-
-app.use(express.json());
-app.use(cookieParser());
 
 app.use("/api/", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
