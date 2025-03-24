@@ -11,23 +11,6 @@ const generateAccessToken = (userId) => {
   });
 };
 
-const registerUser = asyncHandler(async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password)
-    throw new ApiError(400, "All fields are required");
-
-  const existingUser = await User.findOne({ username });
-  if (existingUser) throw new ApiError(409, "Username already exists");
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ username, password: hashedPassword });
-
-  return res
-    .status(201)
-    .json(new ApiResponse(201, { username }, "User registered successfully"));
-});
-
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -49,4 +32,4 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { username, token }, "Login successful"));
 });
 
-export { registerUser, loginUser };
+export { loginUser };
